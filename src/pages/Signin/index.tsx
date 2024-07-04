@@ -1,10 +1,27 @@
 import { Link } from 'react-router-dom'
 import './index.css'
 import { useState } from 'react'
+import { useContext } from 'react'
+import { AuthContext } from '../../contexts/auth'
+
+
+
 
 export default function Signin(){
     const[email,setEmail]=useState('')
     const [password,setPassword]=useState('')
+
+    const {signIn}= useContext(AuthContext)
+
+    function handleSignIn(ev:React.FormEvent<HTMLFormElement>){
+        ev.preventDefault()
+
+        if (email && password){
+            signIn(email,password)
+        }
+
+        
+    }
 
     return(
         <div className='container-center'>
@@ -13,7 +30,7 @@ export default function Signin(){
                     <h1>Login</h1>
                 </div>
 
-                <form>
+                <form onSubmit={handleSignIn}>
                     <h1>Entrar</h1>
                     <input type="text"
                     placeholder='Email@email.com'
