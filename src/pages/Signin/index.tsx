@@ -18,7 +18,12 @@ export default function Signin(){
 
         if (email && password){
             signIn(email,password)
+            setEmail('')
+            setPassword('')
+            return
         }
+
+        alert('preencha os campo')
 
         
     }
