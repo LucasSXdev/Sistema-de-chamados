@@ -1,14 +1,16 @@
-import { Link } from 'react-router-dom'
+import { Link, } from 'react-router-dom'
 import './index.css'
 import { useState } from 'react'
 import { useContext } from 'react'
-import { AuthContext,loadingAuth} from '../../contexts/auth'
+import { AuthContext} from '../../contexts/auth'
+import { useNavigate } from 'react-router-dom'
 
 
 export default function Signup(){
     const [name,setName]=useState('')
     const[email,setEmail]=useState('')
     const [password,setPassword]=useState('')
+    const navigate = useNavigate()
 
     const{signUp,loadingAuth}= useContext(AuthContext)
 
@@ -20,6 +22,7 @@ export default function Signup(){
             setEmail('')
             setPassword('')
             setName('')
+            navigate('/dashboard')
             return
         }
 

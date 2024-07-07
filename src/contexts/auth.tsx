@@ -5,6 +5,9 @@ import {auth,db} from '../services/firebaseConfig'
 
 
 
+
+
+
 interface AuthContextType {
     signed: boolean;
     loadingAuth:boolean
@@ -26,14 +29,20 @@ interface AuthProviderProps {
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
+
 function AuthProvider({children}:AuthProviderProps){
     const[user,setUser]= useState<userData|null>(null)
     const [loadingAuth,setLoadingAuth]= useState(false)
     
+    
+    
+    
+    
     async function signIn(email:string,password:string){
+        setLoadingAuth(true)
         await signInWithEmailAndPassword(auth,email,password)
         .then(()=>{
-            alert('logado com sucesso')
+            alert('usuario logado com sucesso')
         })
         .catch(error=>{
             alert('usuário nao existe'+error)
@@ -42,6 +51,7 @@ function AuthProvider({children}:AuthProviderProps){
 
     async function signUp(email:string,password:string,username:string){
         setLoadingAuth(true)
+        
         await createUserWithEmailAndPassword(auth,email,password)
         .then(async(value)=>{
 
@@ -60,8 +70,7 @@ function AuthProvider({children}:AuthProviderProps){
                 }
 
                 setUser(data)
-                setLoadingAuth(false)
-                
+                setLoadingAuth(false) 
             })
 
             
