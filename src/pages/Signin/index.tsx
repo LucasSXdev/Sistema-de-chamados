@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './index.css'
 import { useState } from 'react'
 import { useContext } from 'react'
@@ -10,14 +10,15 @@ import { AuthContext } from '../../contexts/auth'
 export default function Signin(){
     const[email,setEmail]=useState('')
     const [password,setPassword]=useState('')
+    const navigate = useNavigate()
 
-    const {signIn}= useContext(AuthContext)
+    const {signIn,}= useContext(AuthContext)
 
-    function handleSignIn(ev:React.FormEvent<HTMLFormElement>){
+    async function handleSignIn(ev:React.FormEvent<HTMLFormElement>){
         ev.preventDefault()
 
         if (email && password){
-            signIn(email,password)
+            await signIn(email,password,()=>navigate('/dashboard'))
             setEmail('')
             setPassword('')
             return

@@ -1,19 +1,15 @@
-import { useState,createContext,ReactNode } from "react";
-import { signInWithEmailAndPassword,createUserWithEmailAndPassword } from "firebase/auth";
-import { doc,setDoc } from "firebase/firestore";
-import {auth,db} from '../services/firebaseConfig'
-
-
-
-
-
+import { useState,createContext,ReactNode, useEffect } from "react";
+import { signInWithEmailAndPassword,createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { doc,setDoc,getDoc } from "firebase/firestore";
+import {auth,db, storage} from '../services/firebaseConfig'
 
 interface AuthContextType {
     signed: boolean;
     loadingAuth:boolean
+    loading:boolean
     user: userData | null;
-    signIn: (email: string, password: string) => Promise<void>;
-    signUp: (email: string, password: string, username: string) => Promise<void>;
+    signIn: (email: string, password: string,navigate:()=>void) => Promise<void>;
+    signUp: (email: string, password: string, username: string,navigate:()=>void) => Promise<void>;
 }
 
 interface userData {
@@ -23,7 +19,7 @@ interface userData {
     avatar_url:string|null
 }
 
-interface AuthProviderProps {
+export interface AuthProviderProps {
     children: ReactNode;
 }
 
@@ -33,23 +29,54 @@ export const AuthContext = createContext<AuthContextType>({} as AuthContextType)
 function AuthProvider({children}:AuthProviderProps){
     const[user,setUser]= useState<userData|null>(null)
     const [loadingAuth,setLoadingAuth]= useState(false)
+    const[loading,setLoading]=useState<boolean>(true)
+
+    useEffect(()=>{
+        const loadUser = ()=>{
+            const storageUser = localStorage.getItem('tickets')
+
+            if(storageUser){
+                setUser(JSON.parse(storageUser))
+                setLoading(false)
+            }
+        }
+
+        loadUser()
+    },[])
     
-    
-    
-    
-    
-    async function signIn(email:string,password:string){
+     
+    async function signIn(email:string,password:string,navigate:()=>void){
         setLoadingAuth(true)
         await signInWithEmailAndPassword(auth,email,password)
-        .then(()=>{
-            alert('usuario logado com sucesso')
+        .then(async(value)=>{
+            const uid = value.user.uid
+            const docRef = doc(db,'users',uid)
+            const docSnap = await getDoc(docRef)
+
+            if(docSnap.exists()){
+                const data :userData ={
+                    uid:uid,
+                    name:docSnap.data()?.name,
+                    email:value.user.email,
+                    avatar_url:docSnap.data()?.avatar_url
+                }
+
+                setUser(data)
+                storageUser(data)
+                navigate()
+            }else{
+                alert('documento nao encontrado!')
+            }
+
+            setLoadingAuth(false)
         })
         .catch(error=>{
             alert('usuário nao existe'+error)
+            setLoadingAuth(false)
         })
     }
 
-    async function signUp(email:string,password:string,username:string){
+    async function signUp(email:string,password:string,username:string,navigate:()=>void){
         setLoadingAuth(true)
         
         await createUserWithEmailAndPassword(auth,email,password)
@@ -70,7 +97,10 @@ function AuthProvider({children}:AuthProviderProps){
                 }
 
                 setUser(data)
-                setLoadingAuth(false) 
+                storageUser(data)
+                setLoadingAuth(false)
+                navigate()
+                alert('seja bem vindo ao sistema!')
             })
 
             
@@ -78,9 +108,20 @@ function AuthProvider({children}:AuthProviderProps){
         })
         .catch(error=>{
             alert('nao foi possivel cadastrar um novo usuario'+ error)
-        })
-        
+        })     
     }
+
+    function storageUser(data:userData){
+        localStorage.setItem('tickets',JSON.stringify(data))
+    }
+
+    async function logout(){
+        await signOut(auth)
+        localStorage.removeItem('tickets')
+        setUser(null)
+    }
+
+    
 
     return(
         <AuthContext.Provider value={{
@@ -88,7 +129,8 @@ function AuthProvider({children}:AuthProviderProps){
             user,
             signIn,
             signUp,
-            loadingAuth
+            loadingAuth,
+            loading
         }}>
             {children}
         </AuthContext.Provider>

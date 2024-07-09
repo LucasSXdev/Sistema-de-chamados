@@ -18,11 +18,10 @@ export default function Signup(){
         ev.preventDefault()
 
         if(email && password && name){
-           await signUp(email,password,name)
+           await signUp(email,password,name,()=>navigate('/dashboard'))
             setEmail('')
             setPassword('')
             setName('')
-            navigate('/dashboard')
             return
         }
 
