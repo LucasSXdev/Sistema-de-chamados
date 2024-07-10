@@ -8,7 +8,7 @@ export default function Private({children}:AuthProviderProps){
     const {signed,loading} = useContext(AuthContext)
 
     if(loading){
-        return <div></div>
+        <div>carregando</div>
     }
 
     if(!signed){

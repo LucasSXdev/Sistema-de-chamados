@@ -1,7 +1,7 @@
 import { useState,createContext,ReactNode, useEffect } from "react";
 import { signInWithEmailAndPassword,createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import { doc,setDoc,getDoc } from "firebase/firestore";
-import {auth,db, storage} from '../services/firebaseConfig'
+import {auth,db} from '../services/firebaseConfig'
 
 interface AuthContextType {
     signed: boolean;
@@ -10,13 +10,14 @@ interface AuthContextType {
     user: userData | null;
     signIn: (email: string, password: string,navigate:()=>void) => Promise<void>;
     signUp: (email: string, password: string, username: string,navigate:()=>void) => Promise<void>;
+    logout: ()=>Promise<void>
 }
 
-interface userData {
+export interface userData {
     uid:string,
     name:string,
     email:string|null,
-    avatar_url:string|null
+    avatar_url:string|undefined
 }
 
 export interface AuthProviderProps {
@@ -93,7 +94,7 @@ function AuthProvider({children}:AuthProviderProps){
                     uid:uid,
                     name:username,
                     email:value.user.email,
-                    avatar_url:null
+                    avatar_url:undefined
                 }
 
                 setUser(data)
@@ -130,7 +131,8 @@ function AuthProvider({children}:AuthProviderProps){
             signIn,
             signUp,
             loadingAuth,
-            loading
+            loading,
+            logout
         }}>
             {children}
         </AuthContext.Provider>
