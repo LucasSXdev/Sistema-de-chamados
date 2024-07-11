@@ -3,6 +3,7 @@ import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Private from "./pages/Private";
+import Profile from "./pages/Profile";
 
 
 const routes = createBrowserRouter([
@@ -18,6 +19,11 @@ const routes = createBrowserRouter([
         path: 'dashboard',
         element: <Private><Dashboard /></Private>
       },
+      {
+        path:'profile',
+        element:<Private><Profile/></Private>
+      },
+    
     ],
 );
 
