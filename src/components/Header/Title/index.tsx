@@ -1,3 +1,5 @@
+import './index.css'
+
 interface TitleProps {
     children: React.ReactNode;
     name: string;

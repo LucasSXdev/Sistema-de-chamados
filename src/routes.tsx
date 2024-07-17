@@ -20,7 +20,7 @@ const routes = createBrowserRouter([
         element: <Private><Dashboard /></Private>
       },
       {
-        path:'profile',
+        path:'settings',
         element:<Private><Profile/></Private>
       },
     

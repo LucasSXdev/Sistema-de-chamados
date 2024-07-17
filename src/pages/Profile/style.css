@@ -1,0 +1,32 @@
+.content{
+   margin-left:200px;
+   padding: 1px 16px;
+}
+
+.container{
+    display: flex;
+    background-color: #f8f8f8;
+    margin-left: 200px;
+    padding: 0.8em;
+    align-items: center;
+    margin-bottom: 3em;
+}
+.label_avatar{
+    width: 280px;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.label_avatar input{
+    display: none;
+}
+
+.label_avatar span{
+    z-index: 2;
+    position: absolute;
+}
+
