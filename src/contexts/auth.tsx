@@ -8,9 +8,11 @@ interface AuthContextType {
     loadingAuth:boolean
     loading:boolean
     user: userData | null;
+    setUser:(user:userData|null)=>void
     signIn: (email: string, password: string,navigate:()=>void) => Promise<void>;
     signUp: (email: string, password: string, username: string,navigate:()=>void) => Promise<void>;
-    logout: ()=>Promise<void>
+    logout: ()=>Promise<void>;
+    storageUser:(data:userData)=>void
 }
 
 export interface userData {
@@ -132,7 +134,9 @@ function AuthProvider({children}:AuthProviderProps){
             signUp,
             loadingAuth,
             loading,
-            logout
+            logout,
+            storageUser,
+            setUser
         }}>
             {children}
         </AuthContext.Provider>
