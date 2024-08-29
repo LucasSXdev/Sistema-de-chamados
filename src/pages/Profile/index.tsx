@@ -5,6 +5,11 @@ import './style.css'
 import avatar from '../../assets/avatar.png'
 import { AuthContext } from "../../contexts/auth"
 import { useContext, useState } from "react"
+import { doc, updateDoc } from "firebase/firestore"
+import { db, storage } from "../../services/firebaseConfig"
+import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 
 export default function Profile(){
     const{user,storageUser,setUser,logout}=useContext(AuthContext)
@@ -12,6 +17,14 @@ export default function Profile(){
     const [imageAvatar,setImageAvatar]= useState<File|null>(null)
     const [nome,setNome]= useState(user && user.name)
     const [email,setEmail]=useState(user && user.email)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (!user) {
+            
+            navigate('/profile')
+        }
+    }, [user,navigate])
 
     function handleFile(ev:React.ChangeEvent<HTMLInputElement>){
         const files = ev.target.files?.[0]
@@ -29,6 +42,69 @@ export default function Profile(){
         }
     }
 
+    async function handleSubmit(ev:React.FormEvent<HTMLFormElement>){
+        ev.preventDefault()
+
+        if (!user?.uid) {
+            alert("Usuário não autenticado.")
+            return
+        }
+
+        if(imageAvatar === null || imageAvatar && nome !== ''){
+            const docRef = doc(db,'users',user?.uid)
+            await updateDoc(docRef,{
+                name:nome
+            })
+            .then(()=>{
+             const data :{name:string|null}={
+                    name:nome
+                }
+
+                setUser(data)
+                storageUser(data)
+                alert('usuario atualizado')
+            })
+        }
+    }
+
+    async function handleUpload(){
+        if (!user?.uid) {
+            alert("Usuário não autenticado.");
+            return;
+          }
+
+        const currentUid = user?.uid
+        const uploadRef = ref(storage,`image/${currentUid}/${imageAvatar?.name}`)
+
+        if (!imageAvatar) {
+            alert('Por favor, selecione uma imagem primeiro.');
+            return;
+        }
+
+        const uploadTask = uploadBytes(uploadRef,imageAvatar)
+        .then((snapshot)=>{ 
+            getDownloadURL(snapshot.ref).then(async(dowloadUrl)=>{
+                const urlFoto = dowloadUrl;
+                const docRef = doc(db,'users',currentUid)
+                await updateDoc(docRef,{
+                    avatarUrl:urlFoto,
+                    name:nome
+                })
+                .then(()=>{
+                    const data:{name:string|null,avatar_url:string}= {
+                        ...user,
+                        name:nome,
+                        avatar_url:urlFoto
+                    }
+
+                    setUser(data)
+                    storageUser(data)
+                    alert('Atualizado com sucesso')
+                })
+            })
+        })
+    }
+
     return(
         <div>
             <Header/>
@@ -40,7 +116,7 @@ export default function Profile(){
             </div>
 
             <div className="container">
-                <form className="form_profile">
+                <form className="form_profile" onSubmit={handleSubmit}>
                     <label className="label_avatar">
                         <span>
                             <FiUpload color="#fff" size={25}/>
@@ -61,7 +137,7 @@ export default function Profile(){
                     <label>Email</label>
                     <input type="text" value={email || ''} disabled={true}/>
 
-                    <button type="submit" >Salvar</button>
+                    <button type="submit" onClick={handleUpload} >Salvar</button>
                 </form>
             </div>
 

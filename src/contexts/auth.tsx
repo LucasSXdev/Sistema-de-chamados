@@ -16,10 +16,10 @@ interface AuthContextType {
 }
 
 export interface userData {
-    uid:string,
-    name:string,
-    email:string|null,
-    avatar_url:string|undefined
+    uid?:string,
+    name:string|null,
+    email?:string|null,
+    avatar_url?:string|undefined
 }
 
 export interface AuthProviderProps {
