@@ -1,0 +1,57 @@
+.new{
+    float: right;
+    margin-bottom: 1.5em;
+    background-color: green;
+    padding: 0.5em;
+    border-radius:5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    border: 0;
+    color: #fff; 
+    transition: 0.3s ease-in-out;
+}
+
+.new svg{
+    margin-right: 5px;
+}
+
+.new:hover{
+    background-color: red;
+    transform: scale(1.1);
+}
+
+table{
+    border: 1px solid black;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+table caption{
+    font-size: 1.5em;
+    margin: 0.5em 0.75em;
+
+}
+
+table tr{
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 0.35em;
+}
+
+table th, table td{
+    padding: 0.5em;
+    text-align: center;
+
+}
+
+table th{
+    letter-spacing:0.1em;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    
+}

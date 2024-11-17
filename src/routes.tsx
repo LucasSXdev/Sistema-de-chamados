@@ -4,6 +4,8 @@ import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import Private from "./pages/Private";
 import Profile from "./pages/Profile";
+import Customers from "./pages/Customers";
+import New from "./pages/New";
 
 
 const routes = createBrowserRouter([
@@ -23,6 +25,14 @@ const routes = createBrowserRouter([
         path:'settings',
         element:<Private><Profile/></Private>
       },
+      {
+        path:'customers',
+        element:<Private><Customers/></Private>
+      },
+      {
+        path:'new',
+        element:<New/>
+      }
     
     ],
 );
