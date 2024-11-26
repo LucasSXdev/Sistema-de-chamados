@@ -45,13 +45,14 @@ export default function Dashboard(){
                         <span style={{backgroundColor:'gray'}}>Em Aberto</span>
                         </td>
                         <td data-label = 'Cadastrado'>12/05/2022</td>
-                        <td data-label = '#'/>
-                        <button className="action" style={{backgroundColor:"blue"}}>
-                            <FiSearch color="#fff" size={17} />
-                        </button>
-                        <button className="action"  style={{backgroundColor: 'orange'}}>
-                            <FiEdit2 color="#fff" size={17} />
-                        </button>
+                        <td data-label = '#'>
+                            <button className="action" style={{backgroundColor:"blue"}}>
+                                <FiSearch color="#fff" size={17} />
+                            </button>
+                            <button className="action"  style={{backgroundColor: 'orange'}}>
+                                <FiEdit2 color="#fff" size={17} />
+                            </button>
+                        </td>
                     </tr>
 
                     <tr>
@@ -61,13 +62,14 @@ export default function Dashboard(){
                         <span style={{backgroundColor:'gray'}}>Em Aberto</span>
                         </td>
                         <td data-label = 'Cadastrado'>12/05/2022</td>
-                        <td data-label = '#'/>
-                        <button className="action" style={{backgroundColor:"blue"}}>
-                            <FiSearch color="#fff" size={17} />
-                        </button>
-                        <button className="action"  style={{backgroundColor: 'orange'}}>
-                            <FiEdit2 color="#fff" size={17} />
-                        </button>
+                        <td data-label = '#'>
+                            <button className="action" style={{backgroundColor:"blue"}}>
+                                <FiSearch color="#fff" size={17} />
+                            </button>
+                            <button className="action"  style={{backgroundColor: 'orange'}}>
+                                <FiEdit2 color="#fff" size={17} />
+                            </button>
+                        </td>
                     </tr>
                     
                 </tbody>
