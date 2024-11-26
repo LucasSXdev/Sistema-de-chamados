@@ -3,6 +3,8 @@ import { signInWithEmailAndPassword,createUserWithEmailAndPassword, signOut } fr
 import { doc,setDoc,getDoc } from "firebase/firestore";
 import {auth,db} from '../services/firebaseConfig'
 
+export interface inputChangeEvent extends React.ChangeEvent<HTMLInputElement>{}
+
 interface AuthContextType {
     signed: boolean;
     loadingAuth:boolean
