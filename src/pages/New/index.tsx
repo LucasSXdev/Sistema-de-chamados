@@ -7,7 +7,7 @@ import { inputChangeEvent } from "../../contexts/auth"
 import { useEffect,useContext } from "react"
 import { AuthContext } from "../../contexts/auth"
 import { db } from "../../services/firebaseConfig"
-import { collection,getDoc,getDocs,doc } from "firebase/firestore"
+import { collection,getDoc,getDocs,doc, addDoc } from "firebase/firestore"
 
 const listRef = collection(db,'customers')
 
@@ -65,17 +65,37 @@ export default function New(){
 
     function handleOptionChange(e:inputChangeEvent){
         setStatus(e.target.value)
-        console.log(e.target.value)
     }
 
     function handleChangeSelect(e:inputChangeEvent){
         setAssunto(e.target.value)
-        console.log(e.target.value)
     }
 
     function handleChangeCustomer(e:inputChangeEvent){
         setCustomerSelected(e.target.value)
-        console.log(customers[e.target.value].nomeFantasia)
+    }
+
+    async function handleSubmit(e:React.FormEvent<HTMLFormElement>){
+        e.preventDefault()
+        await addDoc(collection(db,'chamados'),{
+            created:new Date(),
+            cliente:customers[Number(customerSelected)].nomeFantasia,
+            clienteId:customers[Number(customerSelected)].id,
+            assunto:assunto,
+            complemento:complemento,
+            status:status,
+            userId:user?.uid    
+        })
+        .then(()=>{
+            alert('chamado registrado!')
+            setComplemento("")
+            setCustomerSelected(0)
+        })
+        .catch((error)=>{
+            alert('erro ao registrar!')
+            alert(error)
+        })
+
     }
 
     return(
@@ -87,7 +107,7 @@ export default function New(){
                 </Title>
 
                 <div className="container">
-                    <form className="form-profile">
+                    <form className="form-profile" onSubmit={handleSubmit}>
                         <label>Clientes</label>
                         {
                             loadCustomer?(
