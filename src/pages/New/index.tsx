@@ -77,6 +77,8 @@ export default function New(){
 
     async function handleSubmit(e:React.FormEvent<HTMLFormElement>){
         e.preventDefault()
+        const callList = collection(db,'chamados')
+
         await addDoc(collection(db,'chamados'),{
             created:new Date(),
             cliente:customers[Number(customerSelected)].nomeFantasia,
@@ -90,6 +92,8 @@ export default function New(){
             alert('chamado registrado!')
             setComplemento("")
             setCustomerSelected(0)
+            
+            
         })
         .catch((error)=>{
             alert('erro ao registrar!')
